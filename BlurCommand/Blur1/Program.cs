@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Immutable;
+using System.Globalization;
 
 static void PrintArray(int[] input)
 {
@@ -9,15 +10,15 @@ static void PrintArray(int[] input)
     Console.WriteLine();
 }
 
-var result1 = TestArray(7);
-PrintArray(result1);
+/*var result11 = TestArray(5);
+PrintArray(result11);*/
 
-/*var task1Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+var task1Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 var result1 = Task1(task1Input);
 Console.Write("TASK 1:\nInput:\n");
 PrintArray(task1Input);
 Console.WriteLine("Result:");
-PrintArray(result1);*/
+PrintArray(result1);
 
 /*var task2Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 var result2 = Task2(task2Input, 2);
@@ -33,39 +34,37 @@ PrintArray(task3Input);
 Console.WriteLine("Result:");
 PrintArray(result3);*/
 
-static int[] TestArray(int size)
+/*static int[] TestArray(int size)
 {
+    int[] result = new int[size];
     int beginning = -size / 2;
-    int ending = size / 2;
-    int[] result = new int[ending - beginning + 1];
     for (int i = 0; i < result.Length; i++)
     {
         result[i] = beginning++;
     }
     return result;
-}
-
-/*static int[] Task1(int[] img)
-{
-    int[] kernel = new int[] { 1, 2, 3, 4, 5 };
-    int[] result = new int[img.Length - kernel.Length + 1];
-    for (int index = 1; index < img.Length - 1; index++)
-    {
-        for (int x = kernel.Length/2; x < kernel.Length - 2; x++)
-        {
-            
-            for (int i = kernel.Length/2; ;i++)
-            {
-                result[index - (img.Length - result.Length - 1)] =
-                    (img[index - 1] * kernel[x - i] + img[index] * kernel[x] + img[index + 1] * kernel[x + i]) /
-                    kernel.Length;
-            }
-
-        }
-    }
-
-    return result;
 }*/
+
+static int[] Task1(int[] img)
+{
+    int[] kernel = new int[] { 2, 2, 2 };
+    int[] result = new int[img.Length - kernel.Length + 1];
+    int beginning = kernel.Length / 2;
+    double sum = 0;
+    for (int index = beginning; index < img.Length - beginning; index++)
+    {
+        for (int kernelIndex = beginning; kernelIndex < kernel.Length - beginning; kernelIndex++)
+        {
+            for (int i = -beginning; i < beginning; i++)
+            {
+                sum += img[index + i] * kernel[kernelIndex + i];
+            }
+            sum /= kernel.Length;
+        }
+        result[index - (img.Length - result.Length - beginning)] = Convert.ToInt32(sum);
+    }
+    return result;
+}
 
 /*static int[] Task2(int[] img, int blocksize)
 {
