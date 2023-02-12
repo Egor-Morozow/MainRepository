@@ -47,21 +47,19 @@ PrintArray(result3);*/
 
 static int[] Task1(int[] img)
 {
-    int[] kernel = new int[] { 2, 2, 2 };
+    int[] kernel = new int[] { 1, 2, 3, 4, 5 };
     int[] result = new int[img.Length - kernel.Length + 1];
     int beginning = kernel.Length / 2;
-    double sum = 0;
-    for (int index = beginning; index < img.Length - beginning; index++)
-    {
-        for (int kernelIndex = beginning; kernelIndex < kernel.Length - beginning; kernelIndex++)
+    int sum = 0;
+    for (int index =  beginning; index < img.Length - beginning; index++)
+    { 
+        for (int i = -beginning; i < beginning + 1; i++)
         {
-            for (int i = -beginning; i < beginning; i++)
-            {
-                sum += img[index + i] * kernel[kernelIndex + i];
-            }
-            sum /= kernel.Length;
-        }
-        result[index - (img.Length - result.Length - beginning)] = Convert.ToInt32(sum);
+                sum += img[index + i] * kernel[beginning + i];
+        } 
+        sum /= kernel.Length;
+        result[index - (img.Length - result.Length - beginning)] = sum;
+        sum = 0;
     }
     return result;
 }
