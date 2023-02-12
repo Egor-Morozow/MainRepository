@@ -20,6 +20,13 @@ PrintArray(task1Input);
 Console.WriteLine("Result:");
 PrintArray(result1);
 
+var task1ImprovedInput = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+var result1Improved = Task1Improved(task1ImprovedInput);
+Console.Write("TASK 1 with img size:\nInput:\n");
+PrintArray(task1ImprovedInput);
+Console.WriteLine("Result:");
+PrintArray(result1Improved);
+
 /*var task2Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 var result2 = Task2(task2Input, 2);
 Console.Write("TASK 2:\nInput:\n");
@@ -47,7 +54,7 @@ PrintArray(result3);*/
 
 static int[] Task1(int[] img)
 {
-    int[] kernel = new int[] { 1, 2, 3, 4, 5 };
+    int[] kernel = new int[] { 1, 2, 3 };
     int[] result = new int[img.Length - kernel.Length + 1];
     int beginning = kernel.Length / 2;
     int sum = 0;
@@ -59,6 +66,27 @@ static int[] Task1(int[] img)
         } 
         sum /= kernel.Length;
         result[index - (img.Length - result.Length - beginning)] = sum;
+        sum = 0;
+    }
+    return result;
+}
+
+static int[] Task1Improved(int[] img)
+{
+    int[] kernel = new int[] { 1, 2, 3 };
+    int[] result = new int[img.Length];
+    int beginning = kernel.Length / 2;
+    int sum = 0;
+    result[0] = img[0];
+    result[result.Length - 1] = img[result.Length - 1];
+    for (int index = beginning; index < img.Length - beginning; index++)
+    {
+        for (int i = -beginning; i < beginning + 1; i++)
+        {
+            sum += img[index + i] * kernel[beginning + i];
+        }
+        sum /= kernel.Length;
+        result[index - (img.Length - result.Length - beginning) - 1] = sum;
         sum = 0;
     }
     return result;
