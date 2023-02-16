@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 static void PrintArray(int[] input)
 {
@@ -27,14 +28,14 @@ PrintArray(task1ImprovedInput);
 Console.WriteLine("Result:");
 PrintArray(result1Improved);
 
-/*var task2Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-var result2 = Task2(task2Input, 2);
+var task2Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+var result2 = Task2(task2Input, 5);
 Console.Write("TASK 2:\nInput:\n");
 PrintArray(task2Input);
 Console.WriteLine("Result:");
 PrintArray(result2);
 
-var task3Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+/*var task3Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 var result3 = Task3(task3Input);
 Console.Write("TASK 3:\nInput:\n");
 PrintArray(task3Input);
@@ -52,6 +53,7 @@ PrintArray(result3);*/
     return result;
 }*/
 
+//Просто одномерный вариант без блоков
 static int[] Task1(int[] img)
 {
     int[] kernel = new int[] { 1, 2, 3, 4, 5, 6, 7 };
@@ -71,6 +73,7 @@ static int[] Task1(int[] img)
     return result;
 }
 
+//Одномерный вариант без блоков с размером картинки
 static int[] Task1Improved(int[] img)
 {
     int[] kernel = new int[] { 1, 2, 3, 4, 5, 6, 7 };
@@ -99,24 +102,34 @@ static int[] Task1Improved(int[] img)
     return result;
 }
 
-/*static int[] Task2(int[] img, int blocksize)
+//Одномерный вариант с блоками
+static int[] Task2(int[] img, int blockSize)
 {
-    int[] kernel = new int[] { 2, 3, 3 };
-    int[] result = new int[img.Length - kernel.Length - 1];
-    int blockcount = result.Length / blocksize;
-    for (int index = 1; index < img.Length - 1 - blocksize; index++)
+    int[] kernel = new int[] {1, 2, 3 };
+    int[] result = new int[img.Length - kernel.Length * blockSize + blockSize];
+    int beginning = kernel.Length / 2;
+    int sum = 0;
+    int blockCount = img.Length / blockSize;
+    int numOfBlock = 0;
+    for (int index = beginning; index < result.Length + beginning; index++)
     {
-        for (int x = 1; x < kernel.Length - 1; x++)
+        for (int i = -beginning; i < beginning + 1; i++)
         {
-            result[index - (img.Length - result.Length - 1 - blocksize)] =
-                (img[index - 1] * kernel[x - 1] + img[index - 1 + blocksize] * kernel[x] + img[index + blocksize + 1] * kernel[x + 1]) /
-                kernel.Length;
+            sum += img[index - beginning + numOfBlock] * kernel[beginning + i];
+            if (numOfBlock <= blockCount + 1)
+            {
+                numOfBlock += blockSize;
+            }
         }
+        sum /= kernel.Length;
+        result[index - beginning] = sum;
+        sum = 0;
+        numOfBlock = 0;
     }
     return result;
 }
 
-static int[] Task3(int[] img)
+/*static int[] Task3(int[] img)
 {
     int[] kernel = new int[] { 1, 2, 3, 4 };
     int imgwidth = (int) Math.Sqrt(img.Length);
