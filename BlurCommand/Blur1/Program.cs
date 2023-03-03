@@ -43,7 +43,7 @@ PrintArray(task2ImprovedInput);
 Console.WriteLine("Result:");
 PrintArray(result2Improved);*/
 
-var task3Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 };
+var task3Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 var result3 = Task3(task3Input);
 Console.Write("TASK 3:\nInput:\n");
 PrintArray(task3Input);
@@ -177,16 +177,26 @@ static int[] Task2Improved(int[] img, int blockSize)
 //Двумерный вариант без блоков
 static int[] Task3(int[] img)
 {
-    int[] kernel = new int[] { 1, 2, 3, 4 };
+    int[] kernel = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int imgwidth = (int)Math.Sqrt(img.Length);
     int kernelwidth = (int)Math.Sqrt(kernel.Length);
-    var result = new int[(img.Length / imgwidth - (kernel.Length / kernelwidth - 1)) * (img.Length / imgwidth - (kernel.Length / kernelwidth - 1))];
+    var result = new int[img.Length];
     int difference = imgwidth - kernelwidth;
     int sum = 0;
     int imgIndex = 0;
     int kernelIndex = 0;
     int beginningIndex = 0;
-    for (int resultIndex = 0; resultIndex < result.Length; resultIndex++)
+    int resultlength = (img.Length / imgwidth - (kernel.Length / kernelwidth - 1)) * (img.Length / imgwidth - (kernel.Length / kernelwidth - 1));
+    int startend = img.Length/2 - resultlength/2;
+    for (int start = 0; start < startend; start++)
+    {
+        result[start] = img[start];
+    }
+    for (int end = img.Length - startend; end < result.Length; end++)
+    {
+        result[end] = img[end];
+    }
+    for (int resultIndex = 0; resultIndex < resultlength; resultIndex++)
     {
         for (int count = 0; count < kernelwidth; count++)
         {
@@ -205,7 +215,7 @@ static int[] Task3(int[] img)
         }
         sum += img[imgIndex] * kernel[kernelIndex];
         sum /= kernel.Length;
-        result[resultIndex] = sum;
+        result[resultIndex + startend] = sum;
         sum = 0;
         kernelIndex = 0;
         if ((beginningIndex + difference + 1) % imgwidth == 0)
