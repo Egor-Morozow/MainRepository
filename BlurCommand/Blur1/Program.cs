@@ -12,6 +12,29 @@ static void PrintArray(int[] input)
     Console.WriteLine();
 }
 
+static void Print2DArray(int[] input, int width)
+{
+    for (int i = 1; i <= input.Length; i++)
+    {
+        if (i % width != 0)
+        {
+            if (input[i] <= 10)
+            {
+                Console.Write(input[i - 1] + "   ");
+            }
+            else
+            {
+                Console.Write(input[i - 1] + "  ");
+            }
+        }
+        else
+        {
+            Console.Write(input[i - 1] + "\n");
+        }
+    }
+    Console.WriteLine();
+}
+
 /*var result11 = TestArray(5);
 PrintArray(result11);*/
 
@@ -46,11 +69,12 @@ PrintArray(result2Improved);*/
 var task3Input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 int[] task3kernel = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int kernelwidth = (int)Math.Sqrt(task3kernel.Length);
-var result3 = Task3(task3Input, task3kernel, kernelwidth);
+int imgwidth = 4;
+var result3 = Task3(task3Input, task3kernel, kernelwidth, imgwidth);
 Console.Write("TASK 3:\nInput:\n");
-PrintArray(task3Input);
+Print2DArray(task3Input, imgwidth);
 Console.WriteLine("Result:");
-PrintArray(result3);
+Print2DArray(result3, imgwidth);
 
 /*static int[] TestArray(int size)
 {
@@ -177,11 +201,14 @@ static int[] Task2Improved(int[] img, int blockSize)
 
 
 //Двумерный вариант без блоков с размером картинки
-static int[] Task3(int[] img, int[] kernel, int kernelwidth)
+static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
 {
-    if (kernel.Length % 2 != 0 && kernel.Length >= 9 && kernelwidth * kernelwidth == kernel.Length)
+    if (kernel.Length % 2 == 0 || kernel.Length < 9 || kernelwidth * kernelwidth != kernel.Length)
     {
-        int imgwidth = (int)Math.Sqrt(img.Length);
+        return Array.Empty<int>();
+    }
+    else
+    {
         var result = new int[img.Length];
         int difference = imgwidth - kernelwidth;
         int sum = 0;
@@ -239,10 +266,6 @@ static int[] Task3(int[] img, int[] kernel, int kernelwidth)
             }
         }
         return result;
-    }
-    else
-    {
-        return null;
     }
 }
 
