@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 static void PrintArray(int[] input)
 {
@@ -14,23 +15,13 @@ static void PrintArray(int[] input)
 
 static void Print2DArray(int[] input, int width)
 {
-    for (int i = 1; i <= input.Length; i++)
+    for (int i = 0; i < input.Length; i++)
     {
-        if (i % width != 0)
+        if (i % width == 0)
         {
-            if (input[i] <= 10)
-            {
-                Console.Write(input[i - 1] + "   ");
-            }
-            else
-            {
-                Console.Write(input[i - 1] + "  ");
-            }
+            Console.Write(Environment.NewLine);
         }
-        else
-        {
-            Console.Write(input[i - 1] + "\n");
-        }
+        Console.Write(input[i].ToString().PadRight(width));
     }
     Console.WriteLine();
 }
@@ -215,15 +206,18 @@ static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
         int imgIndex = 0;
         int kernelIndex = 0;
         int beginningIndex = 0;
+        int x = -1;
+        int y = 0;
+        int z = 0;
         int resultlength = (img.Length / imgwidth - (kernel.Length / kernelwidth - 1)) *
                            (img.Length / imgwidth - (kernel.Length / kernelwidth - 1));
         int startend = img.Length / 2 - resultlength / 2;
-        for (int start = 0; start < startend; start++)
+        for (int start = 0; start <= imgwidth; start++)
         {
             result[start] = img[start];
         }
 
-        for (int end = img.Length - startend; end < result.Length; end++)
+        for (int end = img.Length - imgwidth - 1; end < result.Length; end++)
         {
             result[end] = img[end];
         }
@@ -249,7 +243,20 @@ static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
 
             sum += img[imgIndex] * kernel[kernelIndex];
             sum /= kernel.Length;
-            result[resultIndex + startend] = sum;
+            if (resultIndex + startend + x <= imgwidth + kernelwidth + x + y && resultIndex + startend + x  > imgwidth)
+            {
+                result[resultIndex + startend + x] = sum;
+            }
+            else
+            {
+                z++;
+                result[resultIndex + startend + x] = img[resultIndex + startend + x];
+                if (z == 2 )
+                {
+                    y += kernelwidth;
+                }
+            }
+
             sum = 0;
             kernelIndex = 0;
             if ((beginningIndex + difference + 1) % imgwidth == 0)
