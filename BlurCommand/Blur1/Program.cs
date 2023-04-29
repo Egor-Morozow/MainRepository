@@ -192,7 +192,7 @@ static int[] Task2Improved(int[] img, int blockSize)
 
 
 //Двумерный вариант без блоков с размером картинки
-static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
+/*static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
 {
     if (kernel.Length % 2 == 0 || kernel.Length < 9 || kernelwidth * kernelwidth != kernel.Length)
     {
@@ -274,6 +274,272 @@ static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
         }
         return result;
     }
+}*/
+
+/*static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
+{
+    if (kernel.Length % 2 == 0 || kernel.Length < 9 || kernelwidth * kernelwidth != kernel.Length)
+    {
+        return Array.Empty<int>();
+    }
+    else
+    {
+        var result = new int[img.Length];
+        int difference = imgwidth - kernelwidth;
+        int sum = 0;
+        int imgIndex = 0;
+        int kernelIndex = 0;
+        int beginningIndex = 0;
+        int resultlength = (img.Length / imgwidth - (kernel.Length / kernelwidth - 1)) *
+                           (img.Length / imgwidth - (kernel.Length / kernelwidth - 1));
+        int startend = img.Length / 2 - resultlength / 2;
+        //for (int start = 0; start <= imgwidth; start++)
+        {
+            result[start] = img[start];
+        }
+
+        for (int end = img.Length - imgwidth - 1; end < result.Length; end++)
+        {
+            result[end] = img[end];
+        //}
+
+        for (int x = 0; x < result.Length; x++)
+        {
+            if (x % imgwidth== 0)
+            {
+                x += resultlength + (int)Math.Sqrt(resultlength) * 2 - 2;
+            }
+            result[x] = img[x];
+        }
+
+        for (int resultIndex = 0; resultIndex < resultlength; resultIndex++)
+        {
+            for (int count = 0; count < kernelwidth; count++)
+            {
+                for (int i = 0; i < kernelwidth - 1; i++)
+                {
+                    sum += img[imgIndex] * kernel[kernelIndex];
+                    imgIndex++;
+                    kernelIndex++;
+                }
+
+                if (count != kernelwidth - 1)
+                {
+                    sum += img[imgIndex] * kernel[kernelIndex];
+                    imgIndex += difference + 1;
+                    kernelIndex++;
+                }
+            }
+
+            sum += img[imgIndex] * kernel[kernelIndex];
+            sum /= kernel.Length;
+           //if (resultIndex + startend > imgwidth)
+            {
+                result[resultIndex + startend] = sum;
+            //}
+           for (int y = imgwidth; y < result.Length - imgwidth - 1; y++)
+           {
+               if (y % (int)Math.Sqrt(resultlength) !=0 && y >imgwidth + (int)Math.Sqrt(resultlength))
+               {
+                   result[y] = img[y];
+                   result[y + 1] = img[y + 1];
+               }
+               else result[resultIndex + startend - 1] = sum;
+            }
+            sum = 0;
+            kernelIndex = 0;
+            if ((beginningIndex + difference + 1) % imgwidth == 0)
+            {
+                imgIndex = 0;
+                imgIndex += beginningIndex + kernelwidth;
+                beginningIndex++;
+            }
+            else
+            {
+                imgIndex = 0;
+                beginningIndex++;
+                imgIndex += beginningIndex;
+            }
+        }
+
+return result;
+    }
+}*/
+
+/*static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
+{
+    if (kernel.Length % 2 == 0 || kernel.Length < 9 || kernelwidth * kernelwidth != kernel.Length)
+    {
+        return Array.Empty<int>();
+    }
+    else
+    {
+        var result = new int[img.Length];
+        int difference = imgwidth - kernelwidth;
+        int sum = 0;
+        int imgIndex = 0;
+        int kernelIndex = 0;
+        int beginningIndex = 0;
+        int resultlength = (img.Length / imgwidth - (kernel.Length / kernelwidth - 1)) *
+                           (img.Length / imgwidth - (kernel.Length / kernelwidth - 1));
+        int startend = img.Length / 2 - resultlength / 2;
+        int resultwidth = (int)Math.Sqrt(resultlength);
+        //for (int start = 0; start <= imgwidth; start++)
+        {
+            result[start] = img[start];
+        }
+
+        for (int end = img.Length - imgwidth - 1; end < result.Length; end++)
+        {
+            result[end] = img[end];
+       // }
+        for (int resultIndex = 0; resultIndex < resultlength; resultIndex++)
+        {
+            for (int count = 0; count < kernelwidth; count++)
+            {
+                for (int i = 0; i < kernelwidth - 1; i++)
+                {
+                    sum += img[imgIndex] * kernel[kernelIndex];
+                    imgIndex++;
+                    kernelIndex++;
+                }
+
+                if (count != kernelwidth - 1)
+                {
+                    sum += img[imgIndex] * kernel[kernelIndex];
+                    imgIndex += difference + 1;
+                    kernelIndex++;
+                }
+            }
+
+            sum += img[imgIndex] * kernel[kernelIndex];
+            sum /= kernel.Length;
+           //if (resultIndex + startend > imgwidth)
+            {
+                result[resultIndex + startend] = sum;
+            //}
+           for (int y = imgwidth; y < result.Length - imgwidth - 1; y++)
+           {
+               if (y % (int)Math.Sqrt(resultlength) !=0 && y >imgwidth + (int)Math.Sqrt(resultlength))
+               {
+                   result[y] = img[y];
+                   result[y + 1] = img[y + 1];
+               }
+               else result[resultIndex + startend - 1] = sum;
+            }
+            sum = 0;
+            kernelIndex = 0;
+            if ((beginningIndex + difference + 1) % imgwidth == 0)
+            {
+                imgIndex = 0;
+                imgIndex += beginningIndex + kernelwidth;
+                beginningIndex++;
+            }
+            else
+            {
+                imgIndex = 0;
+                beginningIndex++;
+                imgIndex += beginningIndex;
+            }
+        }
+        for (int x = 0; x < result.Length; x++)
+        {
+            if (x < imgwidth + (imgwidth - resultwidth) / 2 || x >= result.Length - imgwidth - (imgwidth - resultwidth) / 2 || (x >= imgwidth + (imgwidth - resultwidth) / 2 + resultwidth && x < result.Length - imgwidth - (imgwidth - resultwidth) / 2 - resultwidth))
+            {
+                //x += resultlength + (int)Math.Sqrt(resultlength) * 2 - 2;
+                result[x] = 88;
+            }
+
+        }
+
+        return result;
+    }
+}*/
+
+//Двумерный вариант без блоков с размером картинки
+static int[] Task3(int[] img, int[] kernel, int kernelwidth, int imgwidth)
+{
+    if (kernel.Length % 2 == 0 || kernel.Length < 9 || kernelwidth * kernelwidth != kernel.Length)
+    {
+        return Array.Empty<int>();
+    }
+    else
+    {
+        var result = new int[img.Length];
+        int difference = imgwidth - kernelwidth;
+        int sum = 0;
+        int imgIndex = 0;
+        int kernelIndex = 0;
+        int beginningIndex = 0;
+        int x = -1;
+        int y = 0;
+        int z = 0;
+        int resultlength = (img.Length / imgwidth - (kernel.Length / kernelwidth - 1)) *
+                           (img.Length / imgwidth - (kernel.Length / kernelwidth - 1));
+        int startend = img.Length / 2 - resultlength / 2;
+        int resultwidth = (int)Math.Sqrt(resultlength);
+        for (int resultIndex = 0; resultIndex < resultlength; resultIndex++)
+        {
+            for (int count = 0; count < kernelwidth; count++)
+            {
+                for (int i = 0; i < kernelwidth - 1; i++)
+                {
+                    sum += img[imgIndex] * kernel[kernelIndex];
+                    imgIndex++;
+                    kernelIndex++;
+                }
+
+                if (count != kernelwidth - 1)
+                {
+                    sum += img[imgIndex] * kernel[kernelIndex];
+                    imgIndex += difference + 1;
+                    kernelIndex++;
+                }
+            }
+
+            sum += img[imgIndex] * kernel[kernelIndex];
+            sum /= kernel.Length;
+            if (resultIndex + startend + x <= imgwidth + kernelwidth + x + y && resultIndex + startend + x > imgwidth)
+            {
+                result[resultIndex + startend + x] = sum;
+                result[resultIndex + startend + x + resultwidth] = sum;
+            }
+            /*else
+            {
+                z++;
+                result[resultIndex + startend + x] = img[resultIndex + startend + x];
+                if (z == 2)
+                {
+                    y += kernelwidth;
+                }
+            }*/
+
+            sum = 0;
+            kernelIndex = 0;
+            if ((beginningIndex + difference + 1) % imgwidth == 0)
+            {
+                imgIndex = 0;
+                imgIndex += beginningIndex + kernelwidth;
+                beginningIndex++;
+            }
+            else
+            {
+                imgIndex = 0;
+                beginningIndex++;
+                imgIndex += beginningIndex;
+            }
+        }
+        for (int nums = 0; nums < result.Length; nums++)
+        {
+            if (nums < imgwidth + (imgwidth - resultwidth) / 2 || nums >= result.Length - imgwidth - (imgwidth - resultwidth) / 2 || (nums >= imgwidth + (imgwidth - resultwidth) / 2 + resultwidth && nums < result.Length - imgwidth - (imgwidth - resultwidth) / 2 - resultwidth))
+            {
+                result[nums] = img[nums];
+            }
+
+        }
+        return result;
+    }
+
 }
 
 
